@@ -30,28 +30,69 @@ You need to grant the required Microsoft Graph permissions to your managed ident
 Connect to Microsoft Graph and assign the roles:
 
 ```powershell
+#
+# PowerShell Script to Assign Microsoft Graph API Permissions to a Managed Identity
+#
+
+# --- Step 1: Connect to Microsoft Graph ---
+# Connect with the necessary permission scopes using device code authentication.
+# The required scopes are for reading applications, assigning app roles, and reading directory information.
 Connect-MgGraph -Scopes Application.Read.All, AppRoleAssignment.ReadWrite.All, RoleManagement.ReadWrite.Directory, Directory.Read.All -UseDeviceAuthentication
 
-$managedIdentityId = "27dfa32f-c0ad-403b-b157-6b90784a0413"
+# --- Step 2: Get User Input for the Managed Identity ---
+# Prompt the user to enter the Object ID (or Principal ID) of the Managed Identity.
+$managedIdentityId = Read-Host "Enter the Managed Identity's Object ID"
 
-$msgraph = Get-MgServicePrincipal -Filter "AppId eq '00000003-0000-0000-c000-000000000000'"
+# --- Step 3: Get the Microsoft Graph Service Principal ---
+# This is the application (Microsoft Graph) to which we will assign permissions.
+# We fetch its details, including the available application roles (AppRoles).
+try {
+    Write-Host "Fetching the Microsoft Graph service principal..."
+    $msgraph = Get-MgServicePrincipal -Filter "AppId eq '00000003-0000-0000-c000-000000000000'" -Property Id, AppId, DisplayName, AppRoles -ErrorAction Stop
 
-# Assign each role
-$roleNames = "DeviceManagementManagedDevices.Read.All", "Device.ReadWrite.All", "Directory.Read.All"
+    if ($null -eq $msgraph) {
+        Write-Error "Failed to retrieve Microsoft Graph Service Principal. Check permissions."
+        return
+    }
+    Write-Host "Successfully fetched Microsoft Graph Service Principal: $($msgraph.DisplayName)"
+} catch {
+    Write-Error "An error occurred while fetching the Service Principal: $_"
+    return
+}
 
+# --- Step 4: Define and Assign the Required Roles ---
+# Define the list of permissions (role names) you want to assign.
+$roleNames = "Device.ReadWrite.All", "Directory.Read.All"
+
+# Loop through each role name and assign it to the Managed Identity.
 foreach ($roleName in $roleNames) {
+    # Find the specific role definition within the Microsoft Graph service principal.
     $role = $msgraph.AppRoles | Where-Object { $_.Value -eq $roleName -and $_.AllowedMemberTypes -contains "Application" }
 
     if ($null -eq $role) {
-        Write-Error "App role '$roleName' not found in Microsoft Graph service principal."
+        Write-Warning "App role '$roleName' not found in Microsoft Graph service principal. Skipping."
         continue
     }
 
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $managedIdentityId `
-                                            -PrincipalId $managedIdentityId `
-                                            -ResourceId $msgraph.Id `
-                                            -AppRoleId $role.Id
+    # Create the app role assignment.
+    try {
+        New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $managedIdentityId `
+            -PrincipalId $managedIdentityId `
+            -ResourceId $msgraph.Id `
+            -AppRoleId $role.Id `
+            -ErrorAction Stop
+        Write-Host "✅ Successfully assigned role: $roleName"
+    } catch {
+        # Check if the role is already assigned, which is a common, non-fatal error.
+        if ($_.Exception.Message -like "*Permission being assigned already exists*") {
+            Write-Host "⚠️ Role '$roleName' was already assigned."
+        } else {
+            Write-Error "Failed to assign role '$roleName': $_"
+        }
+    }
 }
+
+Write-Host "`nAll specified roles have been processed."
 ```
 
 ### Via EXE Tool
