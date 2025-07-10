@@ -10,7 +10,7 @@ The Logic App:
 - Parses the response.
 - Iterates through the devices and patches the extension attribute.
 
-**Note:** The Logic App uses authentication parameters (tenantId, clientId, clientSecret) for portability across tenants. Ensure you have the necessary permissions set up.
+**Note:** The Logic App uses authentication parameters (tenantId, clientId, clientSecret) for portability across tenants. Ensure you have the necessary permissions set up. I have also configured it to use a system assigned managed identity, which gets its permissions in the powershell steps 
 
 ## Prerequisites
 
