@@ -89,7 +89,8 @@ MIT License - see LICENSE file for details.
 
 <img width="1185" height="1278" alt="image" src="https://github.com/user-attachments/assets/2ca15835-519b-4ee0-a6cf-61247ba74522" />
 
-<img width="1868" height="1417" alt="image" src="https://github.com/user-attachments/assets/ce9c50b9-9bbf-4d73-bedb-57ae179b2c45" />
+<img width="1917" height="1410" alt="image" src="https://github.com/user-attachments/assets/fe069bf4-f1fd-4b1b-b0f5-b3e4fec4abf3" />
+
 
 
 
