@@ -1,3 +1,5 @@
+Use this LogicApp to add extended attributes to devices that are not compliant
+
 Via PowerShell
 Connect-MgGraph -Scopes Application.Read.All, AppRoleAssignment.ReadWrite.All, RoleManagement.ReadWrite.Directory, Directory.Read.All -UseDeviceAuthentication
 
