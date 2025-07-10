@@ -1,6 +1,6 @@
 # Logic App for Adding Extended Attributes to Non-Compliant Devices
 
-This repository contains a Logic App that identifies non-compliant devices via Microsoft Graph and adds extended attributes (e.g., marking them as "non-compliant" in extensionAttribute1).
+This repository contains a Logic App that identifies non-compliant devices via Microsoft Graph and adds extended attributes (e.g., marking them as "non-compliant" in extensionAttribute1). Note: this is setup for commercial, you will have to change the graph endpoint for other cloud environments
 
 ## Overview
 
@@ -77,9 +77,6 @@ Use the Managed Identity Permission Manager tool:
 For reference, the Logic App definition is included in `logicapp.json` (or paste the provided JSON here if including in README).
 
 
-<img width="1185" height="1278" alt="image" src="https://github.com/user-attachments/assets/f69fe298-98b6-4b38-8686-6328e5a4ad4f" />
-
-
 ## Contributing
 
 Feel free to fork and submit pull requests for improvements.
@@ -87,3 +84,12 @@ Feel free to fork and submit pull requests for improvements.
 ## License
 
 MIT License - see LICENSE file for details.
+
+
+
+<img width="1185" height="1278" alt="image" src="https://github.com/user-attachments/assets/2ca15835-519b-4ee0-a6cf-61247ba74522" />
+
+<img width="1868" height="1417" alt="image" src="https://github.com/user-attachments/assets/ce9c50b9-9bbf-4d73-bedb-57ae179b2c45" />
+
+
+
